@@ -1,0 +1,91 @@
+﻿<div>
+    <h3 class="text-center"><span ng-click="getUserTypes()">User:</span> {{user.firstName + ' ' + user.lastName}}</h3>
+</div>
+
+<div>
+    <!--div class="form-group" ng-class="{true: 'has-error'}[submitted && isEmailError]"-->
+    <div class="row">
+        <div class="col-lg-6 form-group" ng-class="{true: 'has-error'}[submitted && user.departmentId_Err != '']">
+            <label class="control-label" for="userForm">Department</label><select class="form-control" ng-init="user.departmentId" ng-model="user.departmentId" ng-options="d.departmentId as d.departmentName for d in departments" required></select>
+        </div>
+        <div class="col-lg-6 form-group" ng-class="{true: 'has-error'}[submitted && (user.isExistingUserNameErr || user.userName_Err != '')]">
+            <label class="control-label" for="userForm">Username</label><input type="text" class="form-control" ng-model="user.userName" placeholder="Enter Username" required />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6 form-group" ng-class="{true: 'has-error'}[submitted && (user.isExistingEmail || user.email_Err != '')]">
+            <label class="control-label" for="userForm">Email</label><input type="email" class="form-control" id="userFormEmail" name="userFormEmail" ng-model="user.email" placeholder="Enter Email" required />
+        </div>
+
+        <div class="col-lg-6 form-group" ng-class="{true: 'has-error'}[submitted && user.firstName_Err != '']">
+            <label class="control-label" for="userForm">First Name</label><input type="text" class="form-control" ng-model="user.firstName" placeholder="Enter First Name" required />
+        </div>
+    </div>
+
+
+    <div class="row">
+
+        <div class="col-lg-6"></div>
+        <div class="col-lg-6 form-group" ng-class="{true: 'has-error'}[submitted && user.lastName_Err != '']">
+            <label class="control-label" for="userForm">Last Name</label><input type="text" class="form-control" ng-model="user.lastName" placeholder="Enter Last Name" required />
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-lg-2">
+            <button class="btn btn-success" ng-click="submitted=true; saveUser()">Update</button>
+        </div>
+        <div class="col-lg-2">
+            <button class="btn btn-danger" ng-click="cancelUpdateUser()">Cancel</button>
+        </div>
+        <div class="col-lg-2">
+            <button ng-show="!(user.userId == loggedInUserId || user.userId == '')" class="btn btn-danger ng-cloak" ng-cloak ng-click="resetPassword()">Reset Password</button>
+        </div>
+
+        <div class="col-lg-6">
+        </div>
+    </div>
+    <br />
+    <div class="col-lg-4"></div>
+    <div class="col-lg-4 alert alert-danger" ng-show="submitted && user.isUserSaveError">
+        <h4 class="text-center">Please correct the following errors:<br /><br /></h4>
+        <ul class="center-block">
+            <li ng-show="user.departmentId_Err">{{user.departmentId_Err}}</li>
+            <li ng-show="user.isExistingEmail">Email already exists.</li>
+            <li ng-show="user.email_Err">{{user.email_Err}}</li>
+            <li ng-show="user.isExistingUserNameErr">Username already exists.</li>
+            <li ng-show="user.userName_Err">{{user.userName_Err}}</li>
+            <li ng-show="user.firstName_Err">{{user.firstName_Err}}</li>
+            <li ng-show="user.lastName_Err">{{user.lastName_Err}}</li>
+        </ul>
+    </div>
+    <div class="col-lg-4"></div>
+
+
+    <!--<div class="col-md-12 ng-show="user.isUserSaveError">
+        <div ng-show="user.isExistingUserNameErr">
+            Username already exists
+        </div>
+        <div ng-show="user.userName_Err">
+            {{user.userName_Err}}
+        </div>
+        <div ng-show="user.isExistingEmail">
+            Email already exists.
+        </div>
+        <div ng-show="user.email_Err">
+            {{user.email_Err}}
+        </div>
+        <div ng-show="user.firstName_Err">
+            {{user.firstName_Err}}
+        </div>
+        <div ng-show="user.lastName_Err">
+            {{user.lastName_Err}}
+        </div>
+        <div ng-show="user.departmentId_Err">
+            {{user.departmentId_Err}}
+        </div>
+    </div>-->
+</div>
+

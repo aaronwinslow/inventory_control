@@ -1,0 +1,171 @@
+﻿<div class="row">
+    <div class="col-md-4">
+        <button class="btn btn-warning pull-left" ng-click="backToView()">Back to Items List</button>
+    </div>
+    <div class="col-md-4">
+        <h3 class="text-center">Item Detail</h3>
+    </div>
+    <div class="col-md-4">
+
+    </div>
+</div>
+
+<div id="container">
+    <div> 
+        <h3>Item: {{item.itemName}}</h3>
+    </div>
+
+    <div>
+        <div class="row">
+            <div class="col-md-4">
+                <label>Item Id: &nbsp;</label>{{item.itemId}}
+            </div>
+            <div class="col-md-4">
+                <label>Quantity In Stock: &nbsp;</label>{{item.quantityInStock}}
+            </div>
+            <div class="col-md-4">
+                <label id="isActiveLabel" for="isActive?">Item Status: &nbsp;</label>
+                <!--<input type="checkbox" id="isActive?" ng-model="item.isDeleted" />-->
+                <span ng-hide="item.isDeleted">Item is Currently <span class="greenText"><strong>Active</strong></span></span>
+                <span ng-hide="!item.isDeleted">Item is Currently <span class="redText"><strong>Inactive</strong></span></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <label>Barcode: &nbsp;</label>{{item.barCode}}
+            </div>
+            <div class="col-md-4">
+                <label>Supplier Name: &nbsp;</label> {{item.supplierName}}
+            </div>
+            <div class="col-md-4">
+                <label>Supplier Name: &nbsp;</label> {{item.supplierPartName}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <label>Maximum Quantity: &nbsp;</label>{{item.maxQuantity}}
+            </div>
+            <div class="col-md-4">
+                <label>Minimum Quantity: &nbsp;</label>{{item.minQuantity}}
+            </div>
+            <div class="col-md-4">
+                <label>Quantity Per Pallet: &nbsp;</label>{{item.quantityPerPallet}}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <label>Description: &nbsp;</label>{{item.description}}
+            </div>
+
+        </div>
+    </div>
+
+    <div>
+        <button class="btn btn-info" ng-click="newLocationItem()" ng-disabled="disableAddNew || location.palletsRemaining <= 0">Add Item to Location</button>
+
+    </div>
+
+    <div>
+        &nbsp;
+    </div>
+    <div>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Item Name</th>
+                    <th><a ng-click="predicate='quantityOnPallet'; reverse=false">Quantity On Pallet</a>(<a ng-click="predicate='-quantityOnPallet'; reverse=false">^</a>)</th>
+                    <th><a ng-click="predicate='itemId'; reverse=false">Location</a>(<a ng-click="predicate='-locationName'; reverse=false">^</a>)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in locationItems | orderBy:predicate:reverse">
+                    <td>
+                        {{item.itemName}}
+                    </td>
+                    <td>
+                        <span ng-hide="editItemIndex == item.itemLocationXrefId">{{item.quantityOnPallet}}</span>
+                        <input type="text" ng-model="item.quantityOnPallet" ng-show="editItemIndex == item.itemLocationXrefId"
+                               ng-change="checkQuantityRangeObj(item, 'quantityOnPallet', 1, item.quantityPerPallet, item.quantityPerPallet, true)" />
+                    </td>
+                    <td>
+                        <select ng-init="item.locationId" ng-model="item.locationId" ng-options="l.locationId as l.locationName for l in locations | filter:locationAvailable(item.locationId)" ng-show="editItemIndex == item.itemLocationXrefId"></select>
+                        <span ng-hide="editItemIndex == item.itemLocationXrefId || item.isNew">{{item.locationName}}</span>
+
+                    </td>
+                    <td>
+                        <button class="btn btn-danger" ng-click="deleteLocationItem(item)" ng-hide="editItemIndex >= 0">Delete Pallet</button>
+                        <button class="btn btn-warning" ng-click="editLocationItem(item)" ng-hide="editItemIndex >= 0">Edit</button>
+                        <button class="btn btn-success" ng-click="saveLocationItem(item)" ng-show="editItemIndex == item.itemLocationXrefId" ng-disabled="!(item.quantityOnPallet > 0 && item.locationId > 0)">Save</button>
+                        <button class="btn btn-success" ng-click="cancelEditLocationItem(item)" ng-show="editItemIndex == item.itemLocationXrefId">Cancel</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div>
+
+        </div>
+    </div>
+
+
+
+    <!--<div ng-hide="true">
+        <div id="firstRow">
+            <div class="form-group">
+                <label for="itemId">Item Id</label>
+                <input type="text" id="itemId" ng-model="item.itemId" />
+            </div>
+
+            <div class="form-group">
+                <label for="itemName">Item Name</label>
+                <input type="text" id="itemName" ng-model="item.itemName" />
+            </div>
+
+            <div class="form-group">
+                <label for="itemQtyInStock">Quantity In Stock</label>
+                <input type="text" id="itemQtyInStock" ng-model="item.quantityInStock" />
+            </div>
+        </div>
+        <div id="secondRow">
+            <div class="form-group">
+                <label for="itemDescription">Description</label>
+                <input type="text" id="itemDescription" ng-model="item.description" />
+            </div>
+            <div>
+                <label id="isActiveLabel" for="isActive?">Item Status</label>
+                <input type="checkbox" id="isActive?" ng-model="item.isDeleted" />
+                <span ng-hide="item.isDeleted">Item is Currently <span class="greenText"><strong>Active</strong></span></span>
+                <span ng-hide="!item.isDeleted">Item is Currently <span class="redText"><strong>Inactive</strong></span></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Barcode</label>
+            <input type="text" ng-model="item.barCode" />
+        </div>
+
+        <div class="form-group">
+            <label>Maximum Quantity</label>
+            <input type="text" ng-model="item.maxQuantity" />
+        </div>
+
+        <div class="form-group">
+            <label>Minimum Quantity</label>
+            <input type="text" ng-model="item.minQuantity" />
+        </div>
+
+        <div class="form-group">
+            <label>Quantity Per Pallet</label>
+            <input type="text" ng-model="item.quantityPerPallet" />
+        </div>
+        <div class="form-group">
+            <label>Supplier Name</label>
+            <input type="text" ng-model="item.supplierName" />
+        </div>
+
+        <div class="form-group">
+            <label>Supplier Part Name</label>
+            <input type="text" value="item.supplierPartName" />
+    </div>
+    </div>-->
+
+</div>

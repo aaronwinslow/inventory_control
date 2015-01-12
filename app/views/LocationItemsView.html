@@ -1,0 +1,34 @@
+﻿
+<div>
+    <h3 class="text-center">Locations Listing</h3>
+
+
+</div>
+<div>
+    <div class="buttonMargin">
+        <label>Search:</label> <input type="text" ng-model="pageSearch.lookup" placeholder="Search"/>
+    </div>
+    
+    <table class="table table-responsive table-striped table-hover">
+        <thead>
+            <tr>
+                <th><a ng-click="predicate='locationId'; reverse=false">Location Id</a>(<a ng-click="predicate='-locationId'; reverse=false">^</a>)</th>
+                <th><a ng-click="predicate='locationName'; reverse=false">Location Name</a>(<a ng-click="predicate='-locationName'; reverse=false">^</a>)</th>
+                <th><a ng-click="predicate='palletCapacity'; reverse=false">Pallet Capacity</a>(<a ng-click="predicate='-itemIdpalletCapacity'; reverse=false">^</a>)</th>
+                <th><a ng-click="predicate='palletsRemaining'; reverse=false">Remaining Capacity</a>(<a ng-click="predicate='-palletsRemaining'; reverse=false">^</a>)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="loc in filtered = pageItems | orderBy:predicate:reverse | filter:pageSearch | startFrom:(currentPage-1)*entryLimit | limitTo:entryLimit" ng-click="getLocationItem(loc.locationId)">
+                <td>{{loc.locationId}}</td>
+                <td>{{loc.locationName}}</td>
+                <td>{{loc.palletCapacity}}</td>
+                <td>{{loc.palletsRemaining}}</td>
+            </tr>
+        </tbody>
+
+    </table>
+    <div class="text-center">
+        <pagination ng-model="currentPage" max-size="noOfPages > 10 ? 10 : noOfPages" total-items="totalItems" max-size="10" items-per-page="entryLimit" boundary-links="true"></pagination>
+    </div>
+</div>

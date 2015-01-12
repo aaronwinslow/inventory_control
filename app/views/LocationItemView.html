@@ -1,0 +1,76 @@
+﻿<div class="row">
+    <div class="col-md-4">
+        <button class="btn btn-warning pull-left" ng-click="backToLocationItemsView()">Back to Locations</button>
+    </div>
+    <div class="col-md-4">
+        <h3 class="text-center">Manage Items in Location</h3>
+    </div>
+    <div class="col-md-4">
+
+    </div>
+</div>
+
+<div>
+    <div>
+        <label>Location Id:</label> {{location.locationId}}
+    </div>
+
+    <div>
+        <label>Location Name:</label> {{location.locationName}}
+    </div>
+
+    <div>
+        <label>Location Pallet Capacity:</label> {{location.palletCapacity}}
+    </div>
+
+    <div>
+        <label>Location Pallets Space Available:</label> {{location.palletsRemaining}}
+    </div>
+    <div>
+        <button class="btn btn-info" ng-click="newLocationItem()" ng-disabled="disableAddNew || location.palletsRemaining <= 0">Add Item to Location</button>
+    </div>
+    <div>
+        &nbsp;
+    </div>
+    <div>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th><a ng-click="predicate='itemName'; reverse=false">Item Name</a>(<a ng-click="predicate='-itemName'; reverse=false">^</a>)</th>
+                    <th><a ng-click="predicate='quantityOnPallet'; reverse=false">Pallet Quantity</a>(<a ng-click="predicate='-quantityOnPallet'; reverse=false">^</a>)</th>
+                    <th><a ng-click="predicate='locationName'; reverse=false">Location Name</a>(<a ng-click="predicate='-locationName'; reverse=false">^</a>)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in locationItems | orderBy:predicate:reverse">
+                    <td>
+                        <span ng-hide="item.isNew">{{item.itemName}}</span>
+                        <select ng-init="item.itemId" ng-model="item.itemId" ng-options="i.itemId as i.itemName for i in items"
+                                ng-show="editItemIndex == item.itemLocationXrefId && item.isNew"></select>
+
+                    </td>
+                    <td>
+                        <span ng-hide="editItemIndex == item.itemLocationXrefId">{{item.quantityOnPallet}}</span>
+                        <input type="text" ng-model="item.quantityOnPallet" ng-show="editItemIndex == item.itemLocationXrefId"
+                               ng-change="checkQuantityRangeObj(item, 'quantityOnPallet', 1, item.quantityPerPallet, item.quantityPerPallet, true)" />
+                    </td>
+                    <td>
+                        <select ng-init="item.locationId" ng-model="item.locationId" ng-options="l.locationId as l.locationName for l in locations | filter:locationAvailable()" ng-show="editItemIndex == item.itemLocationXrefId && !item.isNew"></select>
+                        <span ng-hide="editItemIndex == item.itemLocationXrefId">{{item.locationName}}</span>
+
+                    </td>
+                    <td>
+                        <button class="btn btn-danger" ng-click="deleteLocationItem(item)" ng-hide="editItemIndex >= 0">Delete Pallet</button>
+                        <button class="btn btn-warning" ng-click="editLocationItem(item)" ng-hide="editItemIndex >= 0">Edit</button>
+                        <button class="btn btn-success" ng-click="saveLocationItem(item)" ng-show="editItemIndex == item.itemLocationXrefId"
+                                ng-show="editItemIndex == item.itemLocationXrefId" ng-disabled="!(item.quantityOnPallet > 0 && item.locationId > 0)">
+                            Save
+                        </button>
+                        <button class="btn btn-success" ng-click="cancelEditLocationItem(item)" ng-show="editItemIndex == item.itemLocationXrefId">Cancel</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

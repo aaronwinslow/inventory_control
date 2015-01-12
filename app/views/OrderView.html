@@ -1,0 +1,118 @@
+﻿<div id="orderViewDataBody">
+
+    <div>
+        <h2 ng-hide="order.isComplete == true" class="text-danger">Order Pending</h2><h2 ng-hide="order.isComplete == false" class="text-success">Order Complete</h2>
+        <h3 class="">Order # {{order.orderId}}</h3>
+    </div>
+
+    <div class="groupOfRows">
+        <div id="row" class="row">
+            <div class="col-lg-4"><h3>{{order.beginTimestamp | date: 'short'}}</h3></div>
+            <div class="col-lg-4"><input type="button" ng-hide="order.isApproved || order.isComplete || order.isDenied || order.userDeleted" ng-disabled="order.orderQuantity > order.quantityInStock" class="btn btn-success" value="Approve" id="approve" ng-click="approveOrder()" href="#modal-container-1" data-toggle="modal" /><br /></div>
+            <div class="col-lg-4 input-group"><span class="input-group-btn"><input type="button" ng-show="!order.isApproved && !order.isDenied" class="btn btn-danger" value="Deny" ng-disabled="order.deniedReason == null" id="denyOrder" ng-click="denyOrder()" /></span><input type="text" ng-hide="order.isApproved || order.isComplete || order.isDenied || order.userDeleted" class="form-control custom-width" placeholder="Reason for denial" id="denialReasonInput" ng-model="order.deniedReason" /></div>
+        </div>
+
+
+        <div id="rowA" class="row">
+            <div class="col-lg-4"><label id="dateTimeRequestedLbl">Date / Time Requested</label></div>
+            <div class="col-lg-4"><h3 ng-show="order.isApproved == true" class="text-success">Order Approved</h3><h3 ng-show="order.isDenied == true" class="text-danger" ng-show="order.isDenied == false && order.isApproved == false">Order Denied</h3><h5>Order Pending</h5></div>
+            <div class="col-lg-4"><label ng-show="order.isDenied == true" id="denialReasonLbl">Denial Reason:&nbsp;</label>{{order.deniedReason}}</div>
+        </div>
+
+        <div id="rowB" class="row">
+            <div class="col-lg-4"><h3 ng-hide="order.endTimestamp == null">{{order.endTimestamp | date: 'short'}}</h3></div>
+            <div class="col-lg-4"><label id="orderIdLbl">Order Id: &nbsp;</label>{{order.orderId}}</div>
+            <div class="col-lg-4"><label id="requesterNameLbl">Requester Name: &nbsp;</label>{{order.firstName + ' ' + order.lastName}}</div>
+        </div>
+
+
+        <div id="row" class="row">
+            <div class="col-lg-4"><label ng-hide="order.endTimestamp == null" id="dateTimeCompletedLbl">Date / Time Completed</label></div>
+            <div class="col-lg-4"><label for="itemName" id="itemNameLbl">Item Name:&nbsp;</label>{{order.itemName}}</div>
+            <div class="col-lg-4"><label id="departmentNameLbl">Department Name: &nbsp;</label>{{order.departmentName}}</div>
+        </div>
+
+
+        <div id="rowD" class="row">
+            <div class="col-lg-4"><h3 ng-show="order.userDeleted == true && order.adminConfirmedDelete == false" class="text-danger">User Canceled</h3><h3 ng-show="order.userDeleted == true && order.adminConfirmedDelete == true" class="text-success">Order Canceled</h3></div>
+            <div class="col-lg-4"><label id="quantityRequestedLbl">Quantity Requested:&nbsp;</label>{{order.orderQuantity}}</div>
+            <div class="col-lg-4"><label id="quantityInStockLbl">Quantity In Stock:&nbsp;</label>{{order.quantityInStock}}</div>
+        </div>
+
+
+        <div id="rowE" class="row">
+            <div class="col-lg-4"><input type="button" ng-hide="!order.userDeleted || order.adminConfirmedDelete" class="btn btn-danger" value="Confirm Delete" id="userDelete" ng-hide="order.adminConfirmedDelete == true" ng-click="approveUserDelete()" /></div>
+            <div class="col-lg-4"><input type="button" ng-hide="order.userDeleted  || order.isComplete" class="btn btn-warning" value="Modify Order Quantity" id="modQtyBtn" ng-click="modQtyOrdered()" /></div>
+            <div class="col-lg-4">&nbsp;</div>
+        </div>
+
+
+        <div id="rowF" class="row">
+            <div class="col-lg-4">&nbsp;</div>
+            <div class="col-lg-4"><input type="text" class="hidden" placeholder="New quantity" id="newQtyInput" ng-model="order.orderQuantity" /><input type="button" ng-disabled="order.orderQuantity < 0 || order.orderQuantity > order.quantityInStock" class="btn btn-danger hidden" value="Save And Approve" id="saveQtyBtn" ng-click="saveQtyOrdered(order.orderId)" href="#modal-container-1" data-toggle="modal" /></div>
+            <div class="col-lg-4">&nbsp;</div>
+        </div>
+
+
+        <div id="rowG" class="row">
+            <div class="col-lg-4">&nbsp;</div>
+            <div class="col-lg-4">&nbsp;</div>
+            <div class="col-lg-4">&nbsp;</div>
+        </div>
+    </div>
+    <h1 ng-hide="order.orderQuantity < order.quantityInStock" ng-show="order.orderQuantity > order.quantityInStock" class="text-center blink text-danger">WARNING!</h1>
+    <h3 ng-hide="order.orderQuantity < order.quantityInStock" ng-show="order.orderQuantity > order.quantityInStock" class="text-center">Product order exceeds product in stock</h3>
+    <h3 ng-hide="order.orderQuantity < order.quantityInStock" ng-show="order.orderQuantity > order.quantityInStock" class="text-center">Order quantity must be modified to continue</h3>
+    
+    <div class="modelContainer">
+
+        <div class="modal fade" id="modal-container-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            Your Order Has Been Sent
+                        </h4>
+                        <h5>Overview</h5>
+                    </div>
+
+
+                    <div class="modal-body">
+
+                        <table class="table; table-bordered; table-striped; table-bordered">
+                            <thead class="">
+                                <tr>
+                                    <th class="col-lg-2 text-center thDark">Order #</th>
+                                    <th class="col-lg-2 text-center thDark">Department</th>
+                                    <th class="col-lg-2 text-center thDark">From</th>
+                                    <th class="col-lg-2 text-center thDark">Qty From Location</th>
+                                    <th class="col-lg-2 text-center thDark">Item Name</th>
+                                    <th class="col-lg-2 text-center thDark">Location</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-center">
+                                <tr ng-repeat="wo in workorder.workOrderItems">
+                                    <td>{{workorder.orderId}}</td>
+                                    <td>{{workorder.toDepartmentName}}</td>
+                                    <td>{{workorder.email}}</td>
+                                    <td>{{wo.quantityFromLocation}}</td>
+                                    <td>{{wo.itemName}}</td>
+                                    <td>{{wo.locationName}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="goHome()">OK</button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>

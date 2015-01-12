@@ -1,0 +1,40 @@
+﻿<div>
+    <h3 class="text-center">Orders</h3>
+</div>
+
+<div>
+    <table class="table table-responsive table-striped table-hover">
+        <thead>
+            <tr>
+                <th><a ng-click="predicate='orderId'; reverse=false">Order Id</a>(<a ng-click="predicate='-orderId'; reverse=false">^</a>)</th>
+                <th><a ng-click="predicate='itemName'; reverse=false">Item Requested</a>(<a ng-click="predicate='-itemName'; reverse=false">^</a>)</th>
+                <th><a ng-click="predicate='orderQuantity'; reverse=false">Quantity Requested</a>(<a ng-click="predicate='-orderQuantity'; reverse=false">^</a>)</th>
+                <th><a ng-click="predicate='departmentName'; reverse=false">Department</a>(<a ng-click="predicate='-departmentName'; reverse=false">^</a>)</th>
+                <th><a ng-click="predicate='isComplete'; reverse=false">Status</a>(<a ng-click="predicate='-isComplete'; reverse=false">^</a>)</th>
+                <th>Denial Reason</th>
+                <th><a ng-click="predicate='beginTimestamp'; reverse=false">Date / Time Requested</a>(<a ng-click="predicate='-beginTimestamp'; reverse=false">^</a>)</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="ord in orders | orderBy:predicate:reverse">
+                <td>{{ord.orderId}}</td>
+                <td>{{ord.itemName}}</td>
+                <td>{{ord.orderQuantity}}</td>
+                <td>{{ord.departmentName}}</td>
+                <td>
+                    <h5 ng-show="ord.isComplete" class="text-success">COMPLETE</h5>
+                    <h5 ng-show="ord.isComplete && ord.isApproved && !ord.isDenied && !ord.userDeleted && !ord.adminConfirmedDelete" class="text-success">APPROVED</h5>
+                    <h5 ng-show="ord.isComplete && !ord.isApproved && ord.isDenied && !ord.userDeleted && !ord.adminConfirmedDelete" class="text-danger">DENIED</h5>
+                    <h5 ng-show="!ord.isComplete && !ord.isApproved && !ord.isDenied && ord.userDeleted && !ord.adminConfirmedDelete" class="">PENDING ADMIN DELETE</h5>
+                    <h5 ng-show="!ord.isComplete && !ord.isApproved && !ord.isDenied && !ord.userDeleted && !ord.adminConfirmedDelete" class="text-danger">PENDING CONFIRMATION</h5>
+                    <h5 ng-show="ord.isComplete && !ord.isApproved && !ord.isDenied && ord.userDeleted && ord.adminConfirmedDelete" class="text-danger">ORDER CANCELED</h5>
+                </td>
+                <td>{{ord.deniedReason}}</td>
+                <td>{{ord.beginTimestamp | date: 'short'}}</td>
+                <td><input type="button" class="btn btn-danger" ng-show="!ord.isComplete && !ord.isApproved && !ord.isDenied && !ord.userDeleted && !ord.adminConfirmedDelete" value="Cancel" ng-click="deleteOrder(ord)" /></td>
+            </tr>
+        </tbody>
+
+    </table>
+</div>

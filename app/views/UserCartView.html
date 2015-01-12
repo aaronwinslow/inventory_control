@@ -1,0 +1,30 @@
+﻿<div>
+    <h3 class="text-center">Order Details</h3>
+</div>
+
+<div class="container">
+
+    <div class="row well">
+        <div class="col-lg-2"><a ng-click="predicate='itemId'; reverse=false">Item Id</a>(<a ng-click="predicate='-itemId'; reverse=false">^</a>)</div>
+        <div class="col-lg-2"><a ng-click="predicate='itemName'; reverse=false">Item Name</a>(<a ng-click="predicate='-itemName'; reverse=false">^</a>)</div>
+        <div class="col-lg-2"><a ng-click="predicate='description'; reverse=false">Description</a>(<a ng-click="predicate='-description'; reverse=false">^</a>)</div>
+        <div class="col-lg-4">Quantity</div>
+        <div class="col-lg-2">Actions</div>
+    </div>
+
+    <div class="row" ng-repeat="item in cartItems | orderBy:predicate:reverse">
+        <div class="col-lg-2">{{item.itemId}}</div>
+        <div class="col-lg-2">{{item.itemName}}</div>
+        <div class="col-lg-2">{{item.description}}</div>
+        <div class="col-lg-4"><input type="text" class="input-md form-control" ng-model="item.amountNeeded" ng-change="checkQuantityRangeObj(item, 'amountNeeded', 0, 10000, 0, true)" /></div>
+        <div class="col-lg-2"><button class="btn btn btn-warning" ng-click="removeItem(item)">Remove Item</button></div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4"><label>Department: </label><select class="input-md form-control" ng-init="departmentId" ng-model="departmentId" ng-options="d.departmentId as d.departmentName for d in departments"></select></div>
+        <div class="col-lg-4"></div>
+        <div class="col-lg-2"></div>
+        <div class="col-lg-2"><button class="btn btn-success" ng-click="submitCart(); goHome()">Submit</button>&nbsp;<button class="btn btn-danger" ng-click="cancelCart(); goHome()">Cancel</button></div>
+    </div>
+
+</div>

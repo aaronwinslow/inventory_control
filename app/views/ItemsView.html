@@ -1,0 +1,33 @@
+﻿<div>
+    <h3 class="text-center">Items Inventory</h3>
+</div>
+
+<div>
+    <div class="buttonMargin">
+        <label>Search:</label> <input type="text" ng-model="pageSearch.lookup" placeholder="Search" />
+    </div>
+    
+    <table class="table table-responsive table-striped table-hover">
+        <thead>
+            <tr>
+                <th><a ng-click="predicate='itemId'; reverse=false">Item Id</a>(<a ng-click="predicate='-itemId'; reverse=false">^</a>)</th>
+                <th><a ng-click="predicate='itemName'; reverse=false">Item Name</a>(<a ng-click="predicate='-itemName'; reverse=false">^</a>)</th>
+                <th><a ng-click="predicate='quantityInStock'; reverse=false">Qty In Stock</a>(<a ng-click="predicate='-quantityInStock'; reverse=false">^</a>)</th>
+                <th><a ng-click="predicate='minQuantity'; reverse=false">Min Qty</a>(<a ng-click="predicate='-minQuantity'; reverse=false">^</a>)</th>
+                <th><a ng-click="predicate='qtyTilOrder'; reverse=false">Qty Until Order</a>(<a ng-click="predicate='-qtyTilOrder'; reverse=false">^</a>)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in filtered = pageItems | orderBy:predicate:reverse | filter:pageSearch | startFrom:(currentPage-1)*entryLimit | limitTo:entryLimit" ng-init="" ng-click="getItem(item.itemId)">
+                <td>{{item.itemId}}</td>
+                <td>{{item.itemName}}</td>
+                <td ng-class="{ 'danger' : item.qtyTilOrder <= 0}"><h5 ng-show="item.quantityInStock > 0">{{item.quantityInStock}}</h5><h5 ng-show="!(item.quantityInStock > 0)" class="text-danger">{{item.quantityInStock}}</h5></td>
+                <td>{{item.minQuantity}}</td>
+                <td ng-class="{ 'danger' : item.qtyTilOrder <= 0}"><h5 ng-show="item.qtyTilOrder > 0">{{item.qtyTilOrder}}</h5><h5 ng-show="!(item.qtyTilOrder > 0)" class="text-danger"><strong><em>{{item.qtyTilOrder}}</em></strong></h5></td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="text-center">
+        <pagination ng-model="currentPage" max-size="noOfPages > 10 ? 10 : noOfPages" total-items="totalItems" max-size="10" items-per-page="entryLimit" boundary-links="true"></pagination>
+    </div>
+</div>

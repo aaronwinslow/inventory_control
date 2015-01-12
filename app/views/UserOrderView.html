@@ -1,0 +1,30 @@
+﻿<div>
+    <h3 class="text-center">Create an Order</h3>
+    <label>Search:</label> <input type="text" ng-model="pageSearch.lookup" placeholder="Search" class=""/>
+    <button class="btn btn-success pull-right buttonMargin" ng-click="addToCart()">Add to Requisitions</button>
+</div>
+
+<div>
+    <table class="table table-responsive table-striped table-hover">
+        <thead>
+            <tr></tr>
+            <tr>
+                <th><a ng-click="predicate='itemId'; reverse=false">Item Id</a>(<a ng-click="predicate='-itemId'; reverse=false">^</a>)</th>
+                <th><a ng-click="predicate='itemName'; reverse=false">Item Name</a>(<a ng-click="predicate='-itemName'; reverse=false">^</a>)</th>
+                <th><a ng-click="predicate='description'; reverse=false">Item Description</a>(<a ng-click="predicate='-description'; reverse=false">^</a>)</th>
+                <th>Amount Needed</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat=" item in filtered = pageItems | orderBy:predicate:reverse | filter:pageSearch | startFrom:(currentPage-1)*entryLimit | limitTo:entryLimit">
+                <td>{{item.itemId}}</td>
+                <td>{{item.itemName}}</td>
+                <td>{{item.description}}</td>
+                <td><input type="text" ng-model="item.amountNeeded" class="form-control" ng-change="checkQuantityRangeObj(item, 'amountNeeded', 0, 10000, 0, true)" /></td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="text-center">
+        <pagination ng-model="currentPage" max-size="noOfPages > 10 ? 10 : noOfPages" total-items="totalItems" max-size="10" items-per-page="entryLimit" boundary-links="true"></pagination>
+    </div>
+</div>

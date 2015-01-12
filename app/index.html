@@ -1,0 +1,93 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="InventoryApp">
+<head>
+    <title>DATA Inc.</title>
+    <link href="/Content/bootstrap.css" rel="stylesheet" />
+    <link href="../Content/customCss.css" rel="stylesheet" />
+    <link href="Inventory.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="../Content/favicon.ico" type="image/x-icon" />
+</head>
+<body >
+
+    <div class="container ng-cloak" ng-cloak >
+        <div class="row">
+            <div class="navbar navbar-inverse" ng-controller="NavController">
+
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a href="#/" class="navbar-brand" >DATA Inc.</a>
+                </div>
+
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li ng-show="isGeneral" ng-class="{active: $route.current.activetab == 'userhome'}"><a href="#/userhome">Home</a></li>
+                        <!--<li ng-show="isAdmin"><a href="#/">HomeA</a></li>-->
+                        <li ng-show="isGeneral" ng-class="{active: $route.current.activetab == 'userorder'}"><a href="#/userorder">Order</a></li>
+                        <li ng-show="isAdmin" ng-class="{active: $route.current.activetab == 'ordersa'}"><a href="#/ordersa">Orders</a></li>
+                        <li ng-show="isAdmin" ng-class="{active: $route.current.activetab == 'users'}"><a href="#/users">Users</a></li>
+                        <li ng-show="isAdmin" ng-class="{active: $route.current.activetab == 'locitems'}"><a href="#/locitems">Locations</a></li>
+                        <li ng-show="isAdmin" ng-class="{active: $route.current.activetab == 'items'}"><a href="#/items">Items</a></li>
+                        <li ng-show="isGeneral" ng-class="{active: $route.current.activetab == 'usercart'}">
+                            <a href="#/usercart">
+                                <!--CartG <span ng-controller="UserCartController"> ({{cartItems.length}}</span> item<span ng-controller="UserCartController" ng-show="cartItems.length != 1">s</span>)-->
+                                Requisitions&nbsp;<span ng-controller="UserCartController" class="badge">{{cartItems.length}}</span>
+                            </a>
+                        </li>
+                        
+                        <!--<li ng-controller="LoginController" ng-show="isAdmin || true"><a href="#/questions">Questions</a></li>-->
+
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a class="pull-right btn-toolbar btn " ng-click="processLogout()" ng-show="isLoggedIn">Logout</a>
+                        </li>
+                        <li><a href="#/login" class="pull-right btn-toolbar btn " ng-controller="LoginController" ng-hide="isLoggedIn">Login</a></li>
+                    </ul>
+                    
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        <div ng-view="" class="row" >
+
+        </div>
+    </div>
+
+    <script src="/Scripts/jquery-2.1.1.js"></script>
+    <script src="/Scripts/bootstrap.js"></script>
+    <script src="/Scripts/angular.js"></script>
+    <script src="/Scripts/angular-route.js"></script>
+    <script src="../Scripts/angular-ui/ui-bootstrap-tpls.js"></script>
+
+    <script src="services/app.js"></script>
+    <script src="services/AuthServices.js"></script>
+    <script src="services/ItemService.js"></script>
+    <script src="services/LocationItemService.js"></script>
+    <script src="services/OrderService.js"></script>
+    <script src="services/UserService.js"></script>
+    <script src="services/CartService.js"></script>
+
+    <script src="controllers/AdminHomeController.js"></script>
+    <script src="controllers/HomeController.js"></script>
+    <script src="controllers/ItemController.js"></script>
+    <script src="controllers/ItemsController.js"></script>
+    <script src="controllers/LocationItemController.js"></script>
+    <script src="controllers/LocationItemsController.js"></script>
+    <script src="controllers/LoginController.js"></script>
+    <script src="controllers/OrderController.js"></script>
+    <script src="controllers/OrdersController.js"></script>
+    <script src="controllers/UserCartController.js"></script>
+    <script src="controllers/UserController.js"></script>
+    <script src="controllers/UserHomeController.js"></script>
+    <script src="controllers/UserOrderController.js"></script>
+    <script src="controllers/UsersController.js"></script>
+    <script src="controllers/NavController.js"></script>
+
+</body>
+</html>
